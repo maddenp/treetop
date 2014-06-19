@@ -7,7 +7,9 @@ module Treetop
       def initialize(input, interval, elements = nil)
         @input = input
         @interval = interval
-        @elements = elements
+        if (@elements = elements)
+          @elements.each { |e| e.parent = self if e.respond_to? :parent= }
+        end
       end
 
       def elements
@@ -19,11 +21,9 @@ module Treetop
             index = last_element ? last_element.interval.last : interval.first
             element = SyntaxNode.new(input, index...(index + 1))
           end
-          element.parent = self
           last_element = element
         end
-
-        @comprehensive_elements
+        @comprehensive_elements.each { |element| element.parent = self }
       end
 
       def terminal?
