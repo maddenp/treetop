@@ -41,7 +41,7 @@ class Layout < Erector::Widget
     end
 
     def site_dir
-      File.join(File.dirname(__FILE__), "site")
+      File.join(File.dirname(__FILE__), "../website")
     end
   end
 

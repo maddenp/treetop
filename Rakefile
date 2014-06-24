@@ -54,9 +54,15 @@ end
 
 desc 'Upload website files'
 task :website_upload do
-  rubyforge_config_file = "#{ENV['HOME']}/.rubyforge/user-config.yml"
-  rubyforge_config = YAML.load_file(rubyforge_config_file)
-  `rsync -aCv doc/site/ #{rubyforge_config['username']}@rubyforge.org:/var/www/gforge-projects/treetop/`
+  # The website is now done using gh-pages
+  system <<-END
+    git checkout gh-pages
+    cp website/*.html .
+    git add *.html
+    git commit -m"Website update `date`"
+    git push
+    git checkout master
+  END
 end
 
 desc 'Generate and upload website files'
