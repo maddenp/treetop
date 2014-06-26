@@ -20,11 +20,12 @@ module Treetop
           if element == true
             index = last_element ? last_element.interval.last : interval.first
             element = SyntaxNode.new(input, index...(index + 1))
-	    element.parent = self
+            element.parent = self
           end
           last_element = element
         end
-        @comprehensive_elements.each { |element| element.parent = self }
+
+        @comprehensive_elements
       end
 
       def terminal?
