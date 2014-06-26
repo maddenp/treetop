@@ -8,8 +8,8 @@ module Treetop
         @input = input
         @interval = interval
         if (@elements = elements)
-          @elements.each { |e| e.equal?(true) or e.parent = self }
-        end
+	  @elements.each { |e| e.equal?(true) or e.parent = self }
+	end
       end
 
       def elements
@@ -20,7 +20,7 @@ module Treetop
           if element == true
             index = last_element ? last_element.interval.last : interval.first
             element = SyntaxNode.new(input, index...(index + 1))
-            element.parent = self
+	    element.parent = self
           end
           last_element = element
         end
