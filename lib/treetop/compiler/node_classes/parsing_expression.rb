@@ -78,8 +78,14 @@ module Treetop
         extend_result declared_module_name if declared_module_name
       end
       
-      def extend_result_with_inline_module
-        extend_result inline_module_name if inline_module_name
+      def extend_result_with_inline_module parent_expression = nil
+	# debugger if parent_expression && !parent_expression.respond_to?(:parent_modules)
+	if parent_expression && parent_expression.parent_modules.size > 0
+	  parent_expression.parent_modules.each do |inline|
+	    extend_result inline.module_name
+	  end
+	end
+	extend_result inline_module_name if inline_module_name
       end
     
       def reset_index

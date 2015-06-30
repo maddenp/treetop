@@ -84,6 +84,10 @@ module Treetop
             super.elements.map {|elt| elt.alternative}
           end
 
+	  def parent_modules
+	    []
+	  end
+
           def inline_modules
             (alternatives.map {|alt| alt.inline_modules }).flatten
           end
@@ -100,10 +104,14 @@ module Treetop
             sequence_body.tail
           end
 
+	  def parent_modules
+	    node_class_declarations.inline_modules
+	  end
+
           def inline_modules
             (sequence_elements.map {|elt| elt.inline_modules}).flatten +
             [sequence_element_accessor_module] +
-            node_class_declarations.inline_modules
+            parent_modules
           end
 
           def inline_module_name
@@ -150,6 +158,10 @@ module Treetop
             atomic
           end
 
+	  def parent_modules
+	    []
+	  end
+
           def inline_modules
             atomic.inline_modules
           end
@@ -166,6 +178,9 @@ module Treetop
           def prefixed_expression
             atomic
           end
+	  def parent_modules
+	    []
+	  end
           def inline_modules
             []
           end
@@ -173,6 +188,7 @@ module Treetop
         /
         atomic suffix node_class_declarations {
           def compile(address, builder, parent_expression=nil)
+	    STDERR.puts "Extraneous module ignored after suffix: #{input[interval].inspect}" if node_class_declarations.inline_modules.size > 0 && atomic.inline_modules.size > 0
             suffix.compile(address, builder, self)
           end
 
@@ -184,8 +200,12 @@ module Treetop
             node_class_declarations.node_class_name
           end
 
+	  def parent_modules
+	    node_class_declarations.inline_modules
+	  end
+
           def inline_modules
-            atomic.inline_modules + node_class_declarations.inline_modules
+            atomic.inline_modules + parent_modules
           end
 
           def inline_module_name
@@ -195,6 +215,7 @@ module Treetop
         /
         atomic node_class_declarations {
           def compile(address, builder, parent_expression=nil)
+	    STDERR.puts "Extraneous module ignored with nested atomic: #{input[interval].inspect}" if node_class_declarations.inline_modules.size > 0 && atomic.inline_modules.size > 0
             atomic.compile(address, builder, self)
           end
 
@@ -202,8 +223,12 @@ module Treetop
             node_class_declarations.node_class_name
           end
 
+	  def parent_modules
+	    node_class_declarations.inline_modules
+	  end
+
           def inline_modules
-            atomic.inline_modules + node_class_declarations.inline_modules
+            atomic.inline_modules + parent_modules
           end
 
           def inline_module_name
@@ -222,6 +247,10 @@ module Treetop
             sequence_primary.compile(lexical_address, builder)
           end
 
+	  def parent_modules
+	    []
+	  end
+
           def inline_modules
             sequence_primary.inline_modules
           end
@@ -237,6 +266,10 @@ module Treetop
           def compile(lexical_address, builder)
             sequence_primary.compile(lexical_address, builder)
           end
+
+	  def parent_modules
+	    []
+	  end
 
           def inline_modules
             sequence_primary.inline_modules
@@ -282,6 +315,10 @@ module Treetop
             elements[1]
           end
 
+	  def parent_modules
+	    []
+	  end
+
           def inline_modules
             atomic.inline_modules
           end
@@ -298,6 +335,9 @@ module Treetop
           def prefixed_expression
             atomic
           end
+	  def parent_modules
+	    []
+	  end
           def inline_modules
             []
           end
@@ -311,6 +351,10 @@ module Treetop
           def node_class_name
             nil
           end
+
+	  def parent_modules
+	    []
+	  end
 
           def inline_modules
             atomic.inline_modules
@@ -338,6 +382,7 @@ module Treetop
             node_class_expression.node_class_name
           end
 
+# !!!! cjh !!!!!
           def inline_modules
             trailing_inline_module.inline_modules
           end
@@ -374,6 +419,9 @@ module Treetop
 
       rule parenthesized_expression
         '(' space? parsing_expression space? ')' <ParenthesizedExpression> {
+	  def parent_modules
+	    []
+	  end
           def inline_modules
             parsing_expression.inline_modules
           end
@@ -439,6 +487,9 @@ module Treetop
 
       rule trailing_inline_module
         space inline_module {
+	  def parent_modules
+	    []
+	  end
           def inline_modules
             [inline_module]
           end
@@ -449,6 +500,9 @@ module Treetop
         }
         /
         '' {
+	  def parent_modules
+	    []
+	  end
           def inline_modules
             []
           end

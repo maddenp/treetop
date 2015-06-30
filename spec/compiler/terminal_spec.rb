@@ -169,9 +169,9 @@ module TerminalSymbolSpec
 #
 #    it "returns true upon parsing matching input prefixes at various indices" do
 #      pending "transient terminal expressions"
-#      parse("foo", :index => 0).should be_true
-#      parse("-foo", :index => 1).should be_true
-#      parse("---foo", :index => 3).should be_true
+#      parse("foo", :index => 0).should be_truthy
+#      parse("-foo", :index => 1).should be_truthy
+#      parse("---foo", :index => 3).should be_truthy
 #    end
 #  end
 end

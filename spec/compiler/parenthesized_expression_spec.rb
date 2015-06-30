@@ -19,4 +19,16 @@ module ParenthesizedExpressionSpec
       end
     end
   end
+
+  describe "An expression with code both inside and outside parentheses" do
+    testing_expression '("foo" { def inner; end } ) { def outer; end} '
+    it "should extend both code modules " do
+      parse('foo') do |result|
+	skip "Arbitrarily nested modules are not yet compiled"
+	result.should respond_to(:inner)
+	result.should respond_to(:outer)
+      end
+    end
+  end
+
 end

@@ -148,7 +148,7 @@ module Treetop
             r3 = instantiate_node(SyntaxNode,input, index...(index + match_len))
             @index += match_len
           else
-            terminal_parse_failure("require")
+            terminal_parse_failure('"require"')
             r3 = nil
           end
           s0 << r3
@@ -324,7 +324,7 @@ module Treetop
           r2 = instantiate_node(SyntaxNode,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('module')
+          terminal_parse_failure('\'module\'')
           r2 = nil
         end
         s1 << r2
@@ -361,7 +361,7 @@ module Treetop
                     r10 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                     @index += match_len
                   else
-                    terminal_parse_failure('::')
+                    terminal_parse_failure('\'::\'')
                     r10 = nil
                   end
                   s9 << r10
@@ -453,7 +453,7 @@ module Treetop
                 r20 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                 @index += match_len
               else
-                terminal_parse_failure('end')
+                terminal_parse_failure('\'end\'')
                 r20 = nil
               end
               s18 << r20
@@ -523,7 +523,7 @@ module Treetop
           r1 = instantiate_node(SyntaxNode,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('grammar')
+          terminal_parse_failure('\'grammar\'')
           r1 = nil
         end
         s0 << r1
@@ -542,7 +542,7 @@ module Treetop
                   r7 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                   @index += match_len
                 else
-                  terminal_parse_failure('do')
+                  terminal_parse_failure('\'do\'')
                   r7 = nil
                 end
                 s6 << r7
@@ -579,7 +579,7 @@ module Treetop
                         r12 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                         @index += match_len
                       else
-                        terminal_parse_failure('end')
+                        terminal_parse_failure('\'end\'')
                         r12 = nil
                       end
                       s0 << r12
@@ -745,7 +745,7 @@ module Treetop
             r7.extend(DeclarationSequence3)
             @index += match_len
           else
-            terminal_parse_failure('')
+            terminal_parse_failure('\'\'')
             r7 = nil
           end
           if r7
@@ -823,7 +823,7 @@ module Treetop
           r1 = instantiate_node(SyntaxNode,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('include')
+          terminal_parse_failure('\'include\'')
           r1 = nil
         end
         s0 << r1
@@ -852,7 +852,7 @@ module Treetop
                     r7 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                     @index += match_len
                   else
-                    terminal_parse_failure('::')
+                    terminal_parse_failure('\'::\'')
                     r7 = nil
                   end
                   if r7
@@ -933,7 +933,7 @@ module Treetop
           r1 = instantiate_node(SyntaxNode,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('rule')
+          terminal_parse_failure('\'rule\'')
           r1 = nil
         end
         s0 << r1
@@ -952,7 +952,7 @@ module Treetop
                   r7 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                   @index += match_len
                 else
-                  terminal_parse_failure('do')
+                  terminal_parse_failure('\'do\'')
                   r7 = nil
                 end
                 s6 << r7
@@ -984,7 +984,7 @@ module Treetop
                         r11 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                         @index += match_len
                       else
-                        terminal_parse_failure('end')
+                        terminal_parse_failure('\'end\'')
                         r11 = nil
                       end
                       s0 << r11
@@ -1071,6 +1071,10 @@ module Treetop
           super.elements.map {|elt| elt.alternative}
         end
 
+	  def parent_modules
+	    []
+	  end
+
         def inline_modules
           (alternatives.map {|alt| alt.inline_modules }).flatten
         end
@@ -1106,7 +1110,7 @@ module Treetop
                 r6 = true
                 @index += match_len
               else
-                terminal_parse_failure('/')
+                terminal_parse_failure('\'/\'')
                 r6 = nil
               end
               s3 << r6
@@ -1178,10 +1182,14 @@ module Treetop
           sequence_body.tail
         end
 
+	  def parent_modules
+	    node_class_declarations.inline_modules
+	  end
+
         def inline_modules
           (sequence_elements.map {|elt| elt.inline_modules}).flatten +
           [sequence_element_accessor_module] +
-          node_class_declarations.inline_modules
+          parent_modules
         end
 
         def inline_module_name
@@ -1418,6 +1426,10 @@ module Treetop
           atomic
         end
 
+	  def parent_modules
+	    []
+	  end
+
         def inline_modules
           atomic.inline_modules
         end
@@ -1444,6 +1456,9 @@ module Treetop
         def prefixed_expression
           atomic
         end
+	  def parent_modules
+	    []
+	  end
         def inline_modules
           []
         end
@@ -1465,6 +1480,7 @@ module Treetop
 
       module Primary5
         def compile(address, builder, parent_expression=nil)
+	    STDERR.puts "Extraneous module ignored after suffix: #{input[interval].inspect}" if node_class_declarations.inline_modules.size > 0 && atomic.inline_modules.size > 0
           suffix.compile(address, builder, self)
         end
 
@@ -1476,8 +1492,12 @@ module Treetop
           node_class_declarations.node_class_name
         end
 
+	  def parent_modules
+	    node_class_declarations.inline_modules
+	  end
+
         def inline_modules
-          atomic.inline_modules + node_class_declarations.inline_modules
+          atomic.inline_modules + parent_modules
         end
 
         def inline_module_name
@@ -1497,6 +1517,7 @@ module Treetop
 
       module Primary7
         def compile(address, builder, parent_expression=nil)
+	    STDERR.puts "Extraneous module ignored with nested atomic: #{input[interval].inspect}" if node_class_declarations.inline_modules.size > 0 && atomic.inline_modules.size > 0
           atomic.compile(address, builder, self)
         end
 
@@ -1504,8 +1525,12 @@ module Treetop
           node_class_declarations.node_class_name
         end
 
+	  def parent_modules
+	    node_class_declarations.inline_modules
+	  end
+
         def inline_modules
-          atomic.inline_modules + node_class_declarations.inline_modules
+          atomic.inline_modules + parent_modules
         end
 
         def inline_module_name
@@ -1673,6 +1698,10 @@ module Treetop
           sequence_primary.compile(lexical_address, builder)
         end
 
+	  def parent_modules
+	    []
+	  end
+
         def inline_modules
           sequence_primary.inline_modules
         end
@@ -1728,6 +1757,10 @@ module Treetop
         def compile(lexical_address, builder)
           sequence_primary.compile(lexical_address, builder)
         end
+
+	  def parent_modules
+	    []
+	  end
 
         def inline_modules
           sequence_primary.inline_modules
@@ -1863,7 +1896,7 @@ module Treetop
             r5 = true
             @index += match_len
           else
-            terminal_parse_failure(':')
+            terminal_parse_failure('\':\'')
             r5 = nil
           end
           s0 << r5
@@ -1904,7 +1937,7 @@ module Treetop
           r0.extend(NullLabel0)
           @index += match_len
         else
-          terminal_parse_failure('')
+          terminal_parse_failure('\'\'')
           r0 = nil
         end
 
@@ -1932,6 +1965,10 @@ module Treetop
           elements[1]
         end
 
+	  def parent_modules
+	    []
+	  end
+
         def inline_modules
           atomic.inline_modules
         end
@@ -1958,6 +1995,9 @@ module Treetop
         def prefixed_expression
           atomic
         end
+	  def parent_modules
+	    []
+	  end
         def inline_modules
           []
         end
@@ -1981,6 +2021,10 @@ module Treetop
         def node_class_name
           nil
         end
+
+	  def parent_modules
+	    []
+	  end
 
         def inline_modules
           atomic.inline_modules
@@ -2133,7 +2177,7 @@ module Treetop
           r0 = instantiate_node(Optional,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('?')
+          terminal_parse_failure('\'?\'')
           r0 = nil
         end
 
@@ -2157,6 +2201,7 @@ module Treetop
           node_class_expression.node_class_name
         end
 
+# !!!! cjh !!!!!
         def inline_modules
           trailing_inline_module.inline_modules
         end
@@ -2218,7 +2263,7 @@ module Treetop
           r1 = instantiate_node(OneOrMore,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('+')
+          terminal_parse_failure('\'+\'')
           r1 = nil
         end
         if r1
@@ -2229,7 +2274,7 @@ module Treetop
             r2 = instantiate_node(ZeroOrMore,input, index...(index + match_len))
             @index += match_len
           else
-            terminal_parse_failure('*')
+            terminal_parse_failure('\'*\'')
             r2 = nil
           end
           if r2
@@ -2304,7 +2349,7 @@ module Treetop
               r5 = instantiate_node(SyntaxNode,input, index...(index + match_len))
               @index += match_len
             else
-              terminal_parse_failure('..')
+              terminal_parse_failure('\'..\'')
               r5 = nil
             end
             s0 << r5
@@ -2358,7 +2403,7 @@ module Treetop
           r1 = instantiate_node(AndPredicate,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('&')
+          terminal_parse_failure('\'&\'')
           r1 = nil
         end
         if r1
@@ -2369,7 +2414,7 @@ module Treetop
             r2 = instantiate_node(NotPredicate,input, index...(index + match_len))
             @index += match_len
           else
-            terminal_parse_failure('!')
+            terminal_parse_failure('\'!\'')
             r2 = nil
           end
           if r2
@@ -2380,7 +2425,7 @@ module Treetop
               r3 = instantiate_node(TransientPrefix,input, index...(index + match_len))
               @index += match_len
             else
-              terminal_parse_failure('~')
+              terminal_parse_failure('\'~\'')
               r3 = nil
             end
             if r3
@@ -2444,6 +2489,9 @@ module Treetop
       end
 
       module ParenthesizedExpression1
+	  def parent_modules
+	    []
+	  end
         def inline_modules
           parsing_expression.inline_modules
         end
@@ -2465,7 +2513,7 @@ module Treetop
           r1 = true
           @index += match_len
         else
-          terminal_parse_failure('(')
+          terminal_parse_failure('\'(\'')
           r1 = nil
         end
         s0 << r1
@@ -2493,7 +2541,7 @@ module Treetop
                   r7 = true
                   @index += match_len
                 else
-                  terminal_parse_failure(')')
+                  terminal_parse_failure('\')\'')
                   r7 = nil
                 end
                 s0 << r7
@@ -2540,6 +2588,7 @@ module Treetop
         i1 = index
         r2 = _nt_keyword_inside_grammar
         if r2
+          @index = i1
           r1 = nil
         else
           @index = i1
@@ -2726,7 +2775,7 @@ module Treetop
           r1 = true
           @index += match_len
         else
-          terminal_parse_failure('"')
+          terminal_parse_failure('\'"\'')
           r1 = nil
         end
         s0 << r1
@@ -2739,12 +2788,15 @@ module Treetop
               r5 = true
               @index += match_len
             else
-              terminal_parse_failure('"')
+              terminal_parse_failure('\'"\'')
               r5 = nil
             end
             if r5
+              @index = i4
               r4 = nil
+              terminal_parse_failure('\'"\'', true)
             else
+              terminal_failures.pop
               @index = i4
               r4 = instantiate_node(SyntaxNode,input, index...index)
             end
@@ -2755,7 +2807,7 @@ module Treetop
                 r7 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                 @index += match_len
               else
-                terminal_parse_failure("\\\\")
+                terminal_parse_failure('"\\\\\\\\"')
                 r7 = nil
               end
               if r7
@@ -2766,7 +2818,7 @@ module Treetop
                   r8 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                   @index += match_len
                 else
-                  terminal_parse_failure('\"')
+                  terminal_parse_failure('\'\\"\'')
                   r8 = nil
                 end
                 if r8
@@ -2811,7 +2863,7 @@ module Treetop
               r10 = true
               @index += match_len
             else
-              terminal_parse_failure('"')
+              terminal_parse_failure('\'"\'')
               r10 = nil
             end
             s0 << r10
@@ -2856,7 +2908,7 @@ module Treetop
           r1 = true
           @index += match_len
         else
-          terminal_parse_failure("'")
+          terminal_parse_failure('"\'"')
           r1 = nil
         end
         s0 << r1
@@ -2869,12 +2921,15 @@ module Treetop
               r5 = true
               @index += match_len
             else
-              terminal_parse_failure("'")
+              terminal_parse_failure('"\'"')
               r5 = nil
             end
             if r5
+              @index = i4
               r4 = nil
+              terminal_parse_failure('"\'"', true)
             else
+              terminal_failures.pop
               @index = i4
               r4 = instantiate_node(SyntaxNode,input, index...index)
             end
@@ -2885,7 +2940,7 @@ module Treetop
                 r7 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                 @index += match_len
               else
-                terminal_parse_failure("\\\\")
+                terminal_parse_failure('"\\\\\\\\"')
                 r7 = nil
               end
               if r7
@@ -2896,7 +2951,7 @@ module Treetop
                   r8 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                   @index += match_len
                 else
-                  terminal_parse_failure("\\'")
+                  terminal_parse_failure('"\\\\\'"')
                   r8 = nil
                 end
                 if r8
@@ -2941,7 +2996,7 @@ module Treetop
               r10 = true
               @index += match_len
             else
-              terminal_parse_failure("'")
+              terminal_parse_failure('"\'"')
               r10 = nil
             end
             s0 << r10
@@ -2998,7 +3053,7 @@ module Treetop
           r1 = true
           @index += match_len
         else
-          terminal_parse_failure('[')
+          terminal_parse_failure('\'[\'')
           r1 = nil
         end
         s0 << r1
@@ -3011,12 +3066,15 @@ module Treetop
               r5 = true
               @index += match_len
             else
-              terminal_parse_failure(']')
+              terminal_parse_failure('\']\'')
               r5 = nil
             end
             if r5
+              @index = i4
               r4 = nil
+              terminal_parse_failure('\']\'', true)
             else
+              terminal_failures.pop
               @index = i4
               r4 = instantiate_node(SyntaxNode,input, index...index)
             end
@@ -3028,7 +3086,7 @@ module Treetop
                 r8 = true
                 @index += match_len
               else
-                terminal_parse_failure('\\')
+                terminal_parse_failure('\'\\\\\'')
                 r8 = nil
               end
               s7 << r8
@@ -3064,12 +3122,15 @@ module Treetop
                     r13 = true
                     @index += match_len
                   else
-                    terminal_parse_failure('\\')
+                    terminal_parse_failure('\'\\\\\'')
                     r13 = nil
                   end
                   if r13
+                    @index = i12
                     r12 = nil
+                    terminal_parse_failure('\'\\\\\'', true)
                   else
+                    terminal_failures.pop
                     @index = i12
                     r12 = instantiate_node(SyntaxNode,input, index...index)
                   end
@@ -3127,7 +3188,7 @@ module Treetop
               r15 = true
               @index += match_len
             else
-              terminal_parse_failure(']')
+              terminal_parse_failure('\']\'')
               r15 = nil
             end
             s0 << r15
@@ -3166,7 +3227,7 @@ module Treetop
           r1 = instantiate_node(SyntaxNode,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('[:')
+          terminal_parse_failure('\'[:\'')
           r1 = nil
         end
         s0 << r1
@@ -3175,7 +3236,7 @@ module Treetop
             r3 = true
             @index += match_len
           else
-            terminal_parse_failure('^')
+            terminal_parse_failure('\'^\'')
             r3 = nil
           end
           if r3
@@ -3190,7 +3251,7 @@ module Treetop
               r5 = instantiate_node(SyntaxNode,input, index...(index + match_len))
               @index += match_len
             else
-              terminal_parse_failure('alnum')
+              terminal_parse_failure('\'alnum\'')
               r5 = nil
             end
             if r5
@@ -3201,7 +3262,7 @@ module Treetop
                 r6 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                 @index += match_len
               else
-                terminal_parse_failure('alpha')
+                terminal_parse_failure('\'alpha\'')
                 r6 = nil
               end
               if r6
@@ -3212,7 +3273,7 @@ module Treetop
                   r7 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                   @index += match_len
                 else
-                  terminal_parse_failure('blank')
+                  terminal_parse_failure('\'blank\'')
                   r7 = nil
                 end
                 if r7
@@ -3223,7 +3284,7 @@ module Treetop
                     r8 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                     @index += match_len
                   else
-                    terminal_parse_failure('cntrl')
+                    terminal_parse_failure('\'cntrl\'')
                     r8 = nil
                   end
                   if r8
@@ -3234,7 +3295,7 @@ module Treetop
                       r9 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                       @index += match_len
                     else
-                      terminal_parse_failure('digit')
+                      terminal_parse_failure('\'digit\'')
                       r9 = nil
                     end
                     if r9
@@ -3245,7 +3306,7 @@ module Treetop
                         r10 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                         @index += match_len
                       else
-                        terminal_parse_failure('graph')
+                        terminal_parse_failure('\'graph\'')
                         r10 = nil
                       end
                       if r10
@@ -3256,7 +3317,7 @@ module Treetop
                           r11 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                           @index += match_len
                         else
-                          terminal_parse_failure('lower')
+                          terminal_parse_failure('\'lower\'')
                           r11 = nil
                         end
                         if r11
@@ -3267,7 +3328,7 @@ module Treetop
                             r12 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                             @index += match_len
                           else
-                            terminal_parse_failure('print')
+                            terminal_parse_failure('\'print\'')
                             r12 = nil
                           end
                           if r12
@@ -3278,7 +3339,7 @@ module Treetop
                               r13 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                               @index += match_len
                             else
-                              terminal_parse_failure('punct')
+                              terminal_parse_failure('\'punct\'')
                               r13 = nil
                             end
                             if r13
@@ -3289,7 +3350,7 @@ module Treetop
                                 r14 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                                 @index += match_len
                               else
-                                terminal_parse_failure('space')
+                                terminal_parse_failure('\'space\'')
                                 r14 = nil
                               end
                               if r14
@@ -3300,7 +3361,7 @@ module Treetop
                                   r15 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                                   @index += match_len
                                 else
-                                  terminal_parse_failure('upper')
+                                  terminal_parse_failure('\'upper\'')
                                   r15 = nil
                                 end
                                 if r15
@@ -3311,7 +3372,7 @@ module Treetop
                                     r16 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                                     @index += match_len
                                   else
-                                    terminal_parse_failure('xdigit')
+                                    terminal_parse_failure('\'xdigit\'')
                                     r16 = nil
                                   end
                                   if r16
@@ -3322,7 +3383,7 @@ module Treetop
                                       r17 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                                       @index += match_len
                                     else
-                                      terminal_parse_failure('word')
+                                      terminal_parse_failure('\'word\'')
                                       r17 = nil
                                     end
                                     if r17
@@ -3350,7 +3411,7 @@ module Treetop
                 r18 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                 @index += match_len
               else
-                terminal_parse_failure(':]')
+                terminal_parse_failure('\':]\'')
                 r18 = nil
               end
               s0 << r18
@@ -3385,7 +3446,7 @@ module Treetop
           r0 = instantiate_node(AnythingSymbol,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('.')
+          terminal_parse_failure('\'.\'')
           r0 = nil
         end
 
@@ -3436,7 +3497,7 @@ module Treetop
             r3 = true
             @index += match_len
           else
-            terminal_parse_failure('<')
+            terminal_parse_failure('\'<\'')
             r3 = nil
           end
           s1 << r3
@@ -3449,12 +3510,15 @@ module Treetop
                 r7 = true
                 @index += match_len
               else
-                terminal_parse_failure('>')
+                terminal_parse_failure('\'>\'')
                 r7 = nil
               end
               if r7
+                @index = i6
                 r6 = nil
+                terminal_parse_failure('\'>\'', true)
               else
+                terminal_failures.pop
                 @index = i6
                 r6 = instantiate_node(SyntaxNode,input, index...index)
               end
@@ -3494,7 +3558,7 @@ module Treetop
                 r9 = true
                 @index += match_len
               else
-                terminal_parse_failure('>')
+                terminal_parse_failure('\'>\'')
                 r9 = nil
               end
               s1 << r9
@@ -3518,7 +3582,7 @@ module Treetop
             r10.extend(NodeClassExpression3)
             @index += match_len
           else
-            terminal_parse_failure('')
+            terminal_parse_failure('\'\'')
             r10 = nil
           end
           if r10
@@ -3546,6 +3610,9 @@ module Treetop
       end
 
       module TrailingInlineModule1
+	  def parent_modules
+	    []
+	  end
         def inline_modules
           [inline_module]
         end
@@ -3556,6 +3623,9 @@ module Treetop
       end
 
       module TrailingInlineModule2
+	  def parent_modules
+	    []
+	  end
         def inline_modules
           []
         end
@@ -3605,7 +3675,7 @@ module Treetop
             r4.extend(TrailingInlineModule2)
             @index += match_len
           else
-            terminal_parse_failure('')
+            terminal_parse_failure('\'\'')
             r4 = nil
           end
           if r4
@@ -3644,7 +3714,7 @@ module Treetop
           r1 = true
           @index += match_len
         else
-          terminal_parse_failure('')
+          terminal_parse_failure('\'\'')
           r1 = nil
         end
         s0 << r1
@@ -3687,7 +3757,7 @@ module Treetop
           r1 = true
           @index += match_len
         else
-          terminal_parse_failure('{')
+          terminal_parse_failure('\'{\'')
           r1 = nil
         end
         s0 << r1
@@ -3710,8 +3780,11 @@ module Treetop
                 r7 = nil
               end
               if r7
+                @index = i6
                 r6 = nil
+                terminal_parse_failure('[{}]', true)
               else
+                terminal_failures.pop
                 @index = i6
                 r6 = instantiate_node(SyntaxNode,input, index...index)
               end
@@ -3754,7 +3827,7 @@ module Treetop
               r9 = true
               @index += match_len
             else
-              terminal_parse_failure('}')
+              terminal_parse_failure('\'}\'')
               r9 = nil
             end
             s0 << r9
@@ -3793,7 +3866,7 @@ module Treetop
           r2 = instantiate_node(SyntaxNode,input, index...(index + match_len))
           @index += match_len
         else
-          terminal_parse_failure('rule')
+          terminal_parse_failure('\'rule\'')
           r2 = nil
         end
         if r2
@@ -3804,7 +3877,7 @@ module Treetop
             r3 = instantiate_node(SyntaxNode,input, index...(index + match_len))
             @index += match_len
           else
-            terminal_parse_failure('end')
+            terminal_parse_failure('\'end\'')
             r3 = nil
           end
           if r3
@@ -3820,6 +3893,7 @@ module Treetop
           i4 = index
           r5 = _nt_non_space_char
           if r5
+            @index = i4
             r4 = nil
           else
             @index = i4
@@ -3858,6 +3932,7 @@ module Treetop
         i1 = index
         r2 = _nt_space
         if r2
+          @index = i1
           r1 = nil
         else
           @index = i1
@@ -4017,7 +4092,7 @@ module Treetop
           r1 = true
           @index += match_len
         else
-          terminal_parse_failure('#')
+          terminal_parse_failure('\'#\'')
           r1 = nil
         end
         s0 << r1
@@ -4030,12 +4105,15 @@ module Treetop
               r5 = true
               @index += match_len
             else
-              terminal_parse_failure("\n")
+              terminal_parse_failure('"\\n"')
               r5 = nil
             end
             if r5
+              @index = i4
               r4 = nil
+              terminal_parse_failure('"\\n"', true)
             else
+              terminal_failures.pop
               @index = i4
               r4 = instantiate_node(SyntaxNode,input, index...index)
             end

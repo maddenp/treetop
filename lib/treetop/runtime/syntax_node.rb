@@ -60,7 +60,7 @@ module Treetop
         end
       end
 
-      def inspect(indent="")
+      def inspect_self(indent="")
         em = extension_modules
         interesting_methods = methods-[em.last ? em.last.methods : nil]-self.class.instance_methods
         im = interesting_methods.size > 0 ? " (#{interesting_methods.join(",")})" : ""
@@ -72,18 +72,25 @@ module Treetop
           em.map{|m| "+"+m.to_s.sub(/.*:/,'')}*"" +
           " offset=#{interval.first}" +
           ", #{tv.inspect}" +
-          im +
-          (elements && elements.size > 0 ?
-            ":" +
-              (elements||[]).map{|e|
-          begin
-            "\n"+e.inspect(indent+"  ")
-          rescue  # Defend against inspect not taking a parameter
-            "\n"+indent+" "+e.inspect
-          end
-              }.join("") :
-            ""
-          )
+          im
+      end
+
+      def inspect_children(indent="")
+	return '' unless elements && elements.size > 0
+	":" +
+	  elements.map do |e|
+	    begin
+	      "\n"+e.inspect(indent+"  ")
+	    rescue  # Defend against inspect not taking a parameter
+	      "\n"+indent+" "+e.inspect
+	    end
+	  end.
+	  join("")
+      end
+
+      def inspect(indent="")
+	inspect_self(indent) +
+	inspect_children(indent)
       end
 
       @@dot_id_counter = 0

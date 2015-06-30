@@ -72,7 +72,7 @@ describe "The 'tt' comand line compiler" do
         (io.read =~ /ERROR.*?not exist.*?continuing/).should_not be_nil
       end
 
-      File.exists?("#{@test_base}.rb").should be_falsy
+      File.exists?("#{@test_base}.rb").should be_falsey
     end
 
     it 'can compile to a specified parser source file' do
@@ -216,8 +216,8 @@ describe "The 'tt' comand line compiler" do
     it 'can not specify an output file' do
       # puts %q{emulate 'tt -o my_bogus_test_parser.rb dumb1 dumb2'}
       pf = 'my_bogus_test_parser.rb'
-      system("ruby -S tt -o #{pf} #{@test_bases.join(' ')} >/dev/null 2>&1").should be_falsy
-      File.exists?(pf).should be_falsy
+      system("ruby -S tt -o #{pf} #{@test_bases.join(' ')} >/dev/null 2>&1").should be_falsey
+      File.exists?(pf).should be_falsey
     end
   end
 

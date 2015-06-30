@@ -40,7 +40,7 @@ describe Compiler::GrammarCompiler do
   end
 
   specify "compilation of a single file to an explicit file name" do
-    File.exists?(alternate_target_path).should be_falsy
+    File.exists?(alternate_target_path).should be_falsey
     compiler.compile(source_path_with_treetop_extension, alternate_target_path)
     File.exists?(alternate_target_path).should be_truthy
     require alternate_target_path

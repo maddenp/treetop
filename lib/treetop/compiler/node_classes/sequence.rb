@@ -9,7 +9,7 @@ module Treetop
         builder.if__ "#{accumulator_var}.last" do
           assign_result "instantiate_node(#{node_class_name},input, #{start_index_var}...index, #{accumulator_var})"
           extend_result sequence_element_accessor_module_name if sequence_element_accessor_module_name
-          extend_result_with_inline_module
+          extend_result_with_inline_module parent_expression
         end
         builder.else_ do
           reset_index
