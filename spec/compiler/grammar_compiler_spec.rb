@@ -32,17 +32,17 @@ describe Compiler::GrammarCompiler do
   specify "compilation of a single file to a default file name" do
     src_copy = "#{@tmpdir}/test_grammar.treetop"
     File.open(source_path_with_treetop_extension) { |f| File.open(src_copy,'w'){|o|o.write(f.read)} }
-    File.exists?(target_path).should be_false
+    File.exists?(target_path).should be_falsey
     compiler.compile(src_copy)
-    File.exists?(target_path).should be_true
+    File.exists?(target_path).should be_truthy
     require target_path
     Test::GrammarParser.new.parse('foo').should_not be_nil
   end
 
   specify "compilation of a single file to an explicit file name" do
-    File.exists?(alternate_target_path).should be_false
+    File.exists?(alternate_target_path).should be_falsy
     compiler.compile(source_path_with_treetop_extension, alternate_target_path)
-    File.exists?(alternate_target_path).should be_true
+    File.exists?(alternate_target_path).should be_truthy
     require alternate_target_path
     Test::GrammarParser.new.parse('foo').should_not be_nil
   end

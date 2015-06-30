@@ -34,36 +34,36 @@ describe "The 'tt' comand line compiler" do
 
     it 'can compile a grammar file' do
       # puts %q{emulate 'tt dumb.tt'}
-      system("ruby -S tt #{@test_grammar}").should be_true
+      system("ruby -S tt #{@test_grammar}").should be_truthy
 
-      File.exists?(@test_ruby).should be_true
-      File.zero?(@test_ruby).should_not be_true
+      File.exists?(@test_ruby).should be_truthy
+      File.zero?(@test_ruby).should_not be_truthy
     end
 
     it 'can compile a relative pathed grammar file' do
       dir = File.basename(File.expand_path(File.dirname(@test_grammar)))
 
       # puts %q{emulate 'tt "../<current_dir>/dumb.tt"'}
-      system("cd #{@tmpdir}/..; ruby -S tt \"./#{dir}/#{@test_base}.tt\"").should be_true
+      system("cd #{@tmpdir}/..; ruby -S tt \"./#{dir}/#{@test_base}.tt\"").should be_truthy
 
-      File.exists?(@test_ruby).should be_true
-      File.zero?(@test_ruby).should_not be_true
+      File.exists?(@test_ruby).should be_truthy
+      File.zero?(@test_ruby).should_not be_truthy
     end
 
     it 'can compile an absolute pathed grammar file' do
       # puts %q{emulate 'tt "/path/to/dumb.tt"'}
-      system("ruby -S tt \"#{File.expand_path(@test_grammar)}\"").should be_true
+      system("ruby -S tt \"#{File.expand_path(@test_grammar)}\"").should be_truthy
 
-      File.exists?(@test_ruby).should be_true
-      File.zero?(@test_ruby).should_not be_true
+      File.exists?(@test_ruby).should be_truthy
+      File.zero?(@test_ruby).should_not be_truthy
     end
 
     it 'can compile without explicit file extensions' do
       # puts %q{emulate 'tt dumb'}
-      system("ruby -S tt #{@test_path}").should be_true
+      system("ruby -S tt #{@test_path}").should be_truthy
 
-      File.exists?(@test_ruby).should be_true
-      File.zero?(@test_ruby).should_not be_true
+      File.exists?(@test_ruby).should be_truthy
+      File.zero?(@test_ruby).should_not be_truthy
     end
 
     it 'skips nonexistent grammar file without failing or creating bogus output' do
@@ -72,17 +72,17 @@ describe "The 'tt' comand line compiler" do
         (io.read =~ /ERROR.*?not exist.*?continuing/).should_not be_nil
       end
 
-      File.exists?("#{@test_base}.rb").should be_false
+      File.exists?("#{@test_base}.rb").should be_falsy
     end
 
     it 'can compile to a specified parser source file' do
       # puts %q{emulate 'tt -o my_dumb_test_parser.rb dumb'}
       pf = "#{@tmpdir}/my_dumb_test_parser.rb"
       begin
-        system("ruby -S tt -o #{pf} #{@test_path}").should be_true
+        system("ruby -S tt -o #{pf} #{@test_path}").should be_truthy
 
-        File.exists?(pf).should be_true
-        File.zero?(pf).should_not be_true
+        File.exists?(pf).should be_truthy
+        File.zero?(pf).should_not be_truthy
       ensure
         File.delete(pf) if File.exists?(pf)
       end
@@ -92,10 +92,10 @@ describe "The 'tt' comand line compiler" do
       # puts %q{emulate 'tt -o must_save_parser.rb dumb'}
       pf = "#{@tmpdir}/must_save_parser.rb"
       begin
-        system("ruby -S tt -o #{pf} #{@test_path}").should be_true
+        system("ruby -S tt -o #{pf} #{@test_path}").should be_truthy
 
-        File.exists?(pf).should be_true
-        File.zero?(pf).should_not be_true
+        File.exists?(pf).should be_truthy
+        File.zero?(pf).should_not be_truthy
 
         # Check that the magic comment is preserved:
         written = File.open(pf, "r") { |f| s = f.read }
@@ -121,16 +121,16 @@ describe "The 'tt' comand line compiler" do
       # puts %q{emulate 'tt -o must_save_parser.rb dumb'}
       pf = "#{@tmpdir}/must_save_parser.rb"
       begin
-        system("ruby -S tt -o #{pf} #{@test_path}").should be_true
+        system("ruby -S tt -o #{pf} #{@test_path}").should be_truthy
 
-        File.exists?(pf).should be_true
-        File.zero?(pf).should_not be_true
+        File.exists?(pf).should be_truthy
+        File.zero?(pf).should_not be_truthy
         orig_file_hash = Digest::SHA1.hexdigest(File.read(pf))
 
         # Modify the file and make sure it gets reverted:
         File.open(pf, "r+") { |f| f.gets; f.write("#") }
 
-        system("ruby -S tt -o #{pf} #{@test_path}").should be_true
+        system("ruby -S tt -o #{pf} #{@test_path}").should be_truthy
         Digest::SHA1.hexdigest(File.read(pf)).should == orig_file_hash
       ensure
         File.delete(pf) if File.exists?(pf)
@@ -139,13 +139,13 @@ describe "The 'tt' comand line compiler" do
 
     it 'can be forced to overwrite existing file #{@test_path}' do
       pf = "#{@test_path}.rb"
-      system("echo some junk >#{pf}").should be_true
+      system("echo some junk >#{pf}").should be_truthy
 
-      File.exists?(pf).should be_true
-      File.zero?(pf).should_not be_true
+      File.exists?(pf).should be_truthy
+      File.zero?(pf).should_not be_truthy
       orig_file_hash = Digest::SHA1.hexdigest(File.read(pf))
 
-      system("ruby -S tt -f #{@test_path}").should be_true
+      system("ruby -S tt -f #{@test_path}").should be_truthy
       Digest::SHA1.hexdigest(File.read(pf)).should_not == orig_file_hash
     end
 
@@ -179,45 +179,45 @@ describe "The 'tt' comand line compiler" do
  
     it 'can compile them in one invocation' do
       # puts %q{emulate 'tt dumb1.tt dumb2.tt'}
-      system("ruby -S tt #{@test_grammars.join(' ')}").should be_true
+      system("ruby -S tt #{@test_grammars.join(' ')}").should be_truthy
 
       @test_bases.each do |f|
         pf = "#{f}.rb"
-        File.exists?(pf).should be_true
-        File.zero?(pf).should_not be_true
+        File.exists?(pf).should be_truthy
+        File.zero?(pf).should_not be_truthy
       end
     end
 
     it 'can compile them without explicit file extenstions' do
       # puts %q{emulate 'tt dumb1 dumb2'}
-      system("ruby -S tt #{@test_bases.join(' ')}").should be_true
+      system("ruby -S tt #{@test_bases.join(' ')}").should be_truthy
 
       @test_bases.each do |f|
         pf = "#{f}.rb"
-        File.exists?(pf).should be_true
-        File.zero?(pf).should_not be_true
+        File.exists?(pf).should be_truthy
+        File.zero?(pf).should_not be_truthy
       end
     end
 
     it 'can skip nonexistent and invalid extension named grammar files' do
       # puts %q{emulate 'tt not_here bad_ext.ttg dumb1 dumb2'}
-      system("ruby -S tt not_here bad_ext.ttg #{@test_bases.join(' ')} >/dev/null 2>&1").should be_true
+      system("ruby -S tt not_here bad_ext.ttg #{@test_bases.join(' ')} >/dev/null 2>&1").should be_truthy
 
-      File.exists?('not_here.rb').should_not be_true
-      File.exists?('bad_ext.rb').should_not be_true
+      File.exists?('not_here.rb').should_not be_truthy
+      File.exists?('bad_ext.rb').should_not be_truthy
 
       @test_bases.each do |f|
         pf = "#{f}.rb"
-        File.exists?(pf).should be_true
-        File.zero?(pf).should_not be_true
+        File.exists?(pf).should be_truthy
+        File.zero?(pf).should_not be_truthy
       end
     end
 
     it 'can not specify an output file' do
       # puts %q{emulate 'tt -o my_bogus_test_parser.rb dumb1 dumb2'}
       pf = 'my_bogus_test_parser.rb'
-      system("ruby -S tt -o #{pf} #{@test_bases.join(' ')} >/dev/null 2>&1").should be_false
-      File.exists?(pf).should be_false
+      system("ruby -S tt -o #{pf} #{@test_bases.join(' ')} >/dev/null 2>&1").should be_falsy
+      File.exists?(pf).should be_falsy
     end
   end
 
