@@ -43,7 +43,7 @@ module Treetop
       
       def when_failure
 	if (e = parent.atomic.expected)
-	  builder << "terminal_failures.pop"
+	  builder << "@terminal_failures.pop"
 	end
         assign_success
       end

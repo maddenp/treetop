@@ -2796,7 +2796,7 @@ module Treetop
               r4 = nil
               terminal_parse_failure('\'"\'', true)
             else
-              terminal_failures.pop
+              @terminal_failures.pop
               @index = i4
               r4 = instantiate_node(SyntaxNode,input, index...index)
             end
@@ -2929,7 +2929,7 @@ module Treetop
               r4 = nil
               terminal_parse_failure('"\'"', true)
             else
-              terminal_failures.pop
+              @terminal_failures.pop
               @index = i4
               r4 = instantiate_node(SyntaxNode,input, index...index)
             end
@@ -3074,7 +3074,7 @@ module Treetop
               r4 = nil
               terminal_parse_failure('\']\'', true)
             else
-              terminal_failures.pop
+              @terminal_failures.pop
               @index = i4
               r4 = instantiate_node(SyntaxNode,input, index...index)
             end
@@ -3130,7 +3130,7 @@ module Treetop
                     r12 = nil
                     terminal_parse_failure('\'\\\\\'', true)
                   else
-                    terminal_failures.pop
+                    @terminal_failures.pop
                     @index = i12
                     r12 = instantiate_node(SyntaxNode,input, index...index)
                   end
@@ -3518,7 +3518,7 @@ module Treetop
                 r6 = nil
                 terminal_parse_failure('\'>\'', true)
               else
-                terminal_failures.pop
+                @terminal_failures.pop
                 @index = i6
                 r6 = instantiate_node(SyntaxNode,input, index...index)
               end
@@ -3784,7 +3784,7 @@ module Treetop
                 r6 = nil
                 terminal_parse_failure('[{}]', true)
               else
-                terminal_failures.pop
+                @terminal_failures.pop
                 @index = i6
                 r6 = instantiate_node(SyntaxNode,input, index...index)
               end
@@ -4113,7 +4113,7 @@ module Treetop
               r4 = nil
               terminal_parse_failure('"\\n"', true)
             else
-              terminal_failures.pop
+              @terminal_failures.pop
               @index = i4
               r4 = instantiate_node(SyntaxNode,input, index...index)
             end
