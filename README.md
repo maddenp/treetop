@@ -4,6 +4,8 @@ Support
 Support for Treetop is provided through the mailing list you can join or browse here:
 http://groups.google.com/group/treetop-dev 
 
+The gem is released from https://github.com/cjheath/treetop so you should check there as well.
+
 Tutorial
 ========
 Languages can be split into two components, their *syntax* and their *semantics*. It's your understanding of English syntax that tells you the stream of words "Sleep furiously green ideas colorless" is not a valid sentence. Semantics is deeper. Even if we rearrange the above sentence to be "Colorless green ideas sleep furiously", which is syntactically correct, it remains nonsensical on a semantic level. With Treetop, you'll be dealing with languages that are much simpler than English, but these basic concepts apply. Your programs will need to address both the syntax and the semantics of the languages they interpret.
