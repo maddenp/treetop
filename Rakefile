@@ -15,6 +15,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "https://github.com/cjheath/treetop"
   gem.platform = Gem::Platform::RUBY
   gem.summary = "A Ruby-based text parsing and interpretation DSL"
+  gem.description = "A Parsing Expression Grammar (PEG) Parser generator DSL for Ruby"
   gem.files = [
       "LICENSE", "README.md", "Rakefile", "treetop.gemspec",
       "{spec,lib,bin,examples}/**/*",
@@ -23,7 +24,6 @@ Jeweler::Tasks.new do |gem|
   gem.bindir = "bin"
   gem.executables = ["tt"]
   gem.require_path = "lib"
-  gem.autorequire = "treetop"
   gem.has_rdoc = false
 end
 Jeweler::RubygemsDotOrgTasks.new
@@ -43,6 +43,13 @@ file 'lib/treetop/compiler/metagrammar.treetop' do |t|
   Treetop::Compiler::GrammarCompiler.new.compile(METAGRAMMAR_PATH)
 end
 
+task :rebuild do
+  $:.unshift "lib"
+  require './lib/treetop'
+  load File.expand_path('../lib/treetop/compiler/metagrammar.rb', __FILE__)
+  Treetop::Compiler::GrammarCompiler.new.compile('lib/treetop/compiler/metagrammar.treetop')
+end
+
 task :version do
   puts RUBY_VERSION
 end
@@ -54,9 +61,15 @@ end
 
 desc 'Upload website files'
 task :website_upload do
-  rubyforge_config_file = "#{ENV['HOME']}/.rubyforge/user-config.yml"
-  rubyforge_config = YAML.load_file(rubyforge_config_file)
-  `rsync -aCv doc/site/ #{rubyforge_config['username']}@rubyforge.org:/var/www/gforge-projects/treetop/`
+  # The website is now done using gh-pages
+  system <<-END
+    git checkout gh-pages
+    cp website/*.html .
+    git add *.html
+    git commit -m"Website update `date`"
+    git push
+    git checkout master
+  END
 end
 
 desc 'Generate and upload website files'

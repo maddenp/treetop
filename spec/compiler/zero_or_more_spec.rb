@@ -5,6 +5,8 @@ module ZeroOrMoreSpec
   end
 
   describe "zero or more of a terminal symbol followed by a node class declaration and a block" do
+    # testing_expression '("foo" { def b_method; end } )* <ZeroOrMoreSpec::Foo> { def a_method; end }'
+    # testing_expression '("foo" { def a_method; end } )* <ZeroOrMoreSpec::Foo>'
     testing_expression '"foo"* <ZeroOrMoreSpec::Foo> { def a_method; end }'
 
     it "successfully parses epsilon, returning an instance declared node class and recording a terminal failure" do

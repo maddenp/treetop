@@ -28,9 +28,9 @@ module Treetop
         parent_expression.inline_module_name
       end
 
-      def assign_and_extend_result
+      def assign_and_extend_result parent_expression
         assign_result "instantiate_node(#{node_class_name},input, #{start_index_var}...index, #{accumulator_var})"
-        extend_result_with_inline_module
+        extend_result_with_inline_module parent_expression
       end
     end
 
@@ -38,7 +38,7 @@ module Treetop
     class ZeroOrMore < Repetition
       def compile(address, builder, parent_expression)
         super
-        assign_and_extend_result
+        assign_and_extend_result parent_expression
         end_comment(parent_expression)
       end
 
@@ -55,7 +55,7 @@ module Treetop
           assign_failure start_index_var
         end
         builder.else_ do
-          assign_and_extend_result
+          assign_and_extend_result parent_expression
         end
         end_comment(parent_expression)
       end
@@ -81,11 +81,11 @@ module Treetop
 	  end
           builder.else_ do
 	    clean_unsaturated
-	    assign_and_extend_result
+	    assign_and_extend_result parent_expression
 	  end
         else
 	  clean_unsaturated
-	  assign_and_extend_result
+	  assign_and_extend_result parent_expression
 	end
 
         end_comment(parent_expression)
@@ -95,7 +95,7 @@ module Treetop
       def clean_unsaturated
 	if !max.empty? && max.text_value.to_i > 0
 	  builder.if_ "#{accumulator_var}.size < #{max.text_value}" do
-	    builder << 'terminal_failures.pop'  # Ignore the last failure.
+	    builder << '@terminal_failures.pop'  # Ignore the last failure.
 	  end
 	end
       end

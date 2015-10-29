@@ -8,7 +8,7 @@ group :development do
   gem "i18n", "~> 0.6"
   gem "rr", "~> 1.0"
   gem "rspec", "~> 2"
-  gem "rake", "~> 10"
+  gem "rake"  , "~> 10"
 end
 
 group :website do

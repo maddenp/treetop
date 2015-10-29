@@ -120,4 +120,34 @@ module CompiledParserSpec
       failure.expected_string.should == "'a'"
     end
   end
+
+  describe "a SyntaxNode" do
+    attr_reader :parser
+
+    testing_grammar %{
+      grammar Alternates
+        rule main
+          aa &{|s| s[0].elements[0].parent.should == s[0] }
+	  / ab &{|s| s[0].elements[0].parent.should == s[0] }
+        end
+
+	rule aa
+	  'a' 'a'
+	end
+
+	rule ab
+	  'a' 'b'
+	end
+      end
+    }
+
+    before do
+      @parser = parser_class_under_test.new
+    end
+
+    it "should have its parent set and reset" do
+      parser.parse('ab')
+    end
+  end
+
 end
