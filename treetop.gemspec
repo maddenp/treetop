@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Nathan Sobo", "Clifford Heath"]
-  s.date = "2015-07-13"
+  s.date = "2016-02-21"
   s.description = "A Parsing Expression Grammar (PEG) Parser generator DSL for Ruby"
   s.email = "cliffordheath@gmail.com"
   s.executables = ["tt"]
@@ -36,8 +36,6 @@ Gem::Specification.new do |s|
     "doc/using_in_ruby.markdown",
     "examples/indented_blocks/indented_blocks.tt",
     "examples/indented_blocks/indented_blocks_test.rb",
-    "examples/inner_outer.rb",
-    "examples/inner_outer.tt",
     "examples/lambda_calculus/arithmetic.rb",
     "examples/lambda_calculus/arithmetic.treetop",
     "examples/lambda_calculus/arithmetic_node_classes.rb",
@@ -47,8 +45,6 @@ Gem::Specification.new do |s|
     "examples/lambda_calculus/lambda_calculus_node_classes.rb",
     "examples/lambda_calculus/lambda_calculus_test.rb",
     "examples/lambda_calculus/test_helper.rb",
-    "examples/numerals.rb",
-    "examples/numerals.tt",
     "lib/treetop.rb",
     "lib/treetop/bootstrap_gen_1_metagrammar.rb",
     "lib/treetop/compiler.rb",
