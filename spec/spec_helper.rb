@@ -12,6 +12,8 @@ module Treetop
   module ExampleGroupInstanceMethods
     module ClassMethods
       attr_accessor :parser_class_under_test
+      attr_accessor :parser_text
+      attr_accessor :parser_code
 
       def testing_expression(expression_under_test)
         testing_grammar(%{
@@ -24,9 +26,10 @@ module Treetop
       end
 
       def testing_grammar(grammar_under_test)
+	self.parser_text = grammar_under_test
         grammar_node = parse_with_metagrammar(grammar_under_test.strip, :module_or_grammar)
-        parser_code = grammar_node.compile
-        class_eval(parser_code)
+        self.parser_code = grammar_node.compile
+        class_eval(self.parser_code)
         self.parser_class_under_test = class_eval(grammar_node.parser_name)
       end
 

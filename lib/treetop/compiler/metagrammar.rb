@@ -1369,6 +1369,7 @@ module Treetop
 
         r0 = _nt_labeled_sequence_primary
         r0.extend(LabeledExpressionSequenceBody0)
+        r0.extend(LabeledExpressionSequenceBody0)
 
         node_cache[:labeled_expression_sequence_body][start_index] = r0
 
@@ -1480,7 +1481,7 @@ module Treetop
 
       module Primary5
         def compile(address, builder, parent_expression=nil)
-	    STDERR.puts "Extraneous module ignored after suffix: #{input[interval].inspect}" if node_class_declarations.inline_modules.size > 0 && atomic.inline_modules.size > 0
+	    # STDERR.puts "Extraneous module ignored after suffix: #{input[interval].inspect}" if node_class_declarations.inline_modules.size > 0 && atomic.inline_modules.size > 0
           suffix.compile(address, builder, self)
         end
 
