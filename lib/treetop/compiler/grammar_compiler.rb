@@ -33,10 +33,13 @@ module Treetop
 
   # compile a treetop source file and load it
   def self.load(path)
-    adjusted_path = path =~ /\.(treetop|tt)\Z/ ? path : path + '.treetop'
-    File.open(adjusted_path) do |source_file|
+    unless path =~ Treetop::Polyglot::VALID_GRAMMAR_EXT_REGEXP
+      ext = Treetop::Polyglot::VALID_GRAMMAR_EXT.select {|ext| File.exist?(path+".#{ext}")}.shift
+      path += ".#{ext}" unless ext.nil?
+    end
+    File.open(path) do |source_file|
       source = source_file.read
-      source.gsub!(/\b__FILE__\b/, %Q{"#{adjusted_path}"})
+      source.gsub!(/\b__FILE__\b/, %Q{"#{path}"})
       load_from_string(source)
     end
   end
