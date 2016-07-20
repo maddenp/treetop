@@ -22,8 +22,8 @@ module CharacterClassSpec
 
     it "does not match single characters outside of that range" do
       parse('8') do |result|
-	result.should be_nil
-	parser.terminal_failures.size.should == 1
+        result.should be_nil
+        parser.terminal_failures.size.should == 1
       end
       parse('a').should be_nil
     end
@@ -212,7 +212,7 @@ module CharacterClassSpec
     it "doesn't evaluate the insertion" do
       x = true
       lambda{
-	x = parse("y")
+        x = parse("y")
       }.should_not raise_error
       x.should be_nil
       parse('#').should_not be_nil

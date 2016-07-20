@@ -6,8 +6,8 @@ module NotPredicateSpec
 
     it "fails to parse input matching the terminal symbol" do
       parse('foo') do |result|
-	result.should be_nil
-	parser.terminal_failures.size.should == 1
+        result.should be_nil
+        parser.terminal_failures.size.should == 1
       end
     end
   end
@@ -17,8 +17,8 @@ module NotPredicateSpec
 
     it "fails to parse input matching the terminal symbol" do
       parse('e') do |result|
-	result.should be_nil
-	parser.terminal_failures.size.should == 1
+        result.should be_nil
+        parser.terminal_failures.size.should == 1
       end
     end
   end
@@ -44,8 +44,8 @@ module NotPredicateSpec
 
     it "fails to parse matching input" do
       parse('abcc') do |result|
-	result.should be_nil
-	parser.terminal_failures.size.should == 1
+        result.should be_nil
+        parser.terminal_failures.size.should == 1
       end
     end
   end

@@ -8,6 +8,10 @@ module Treetop
         extend_result_with_declared_module
         extend_result_with_inline_module parent_expression
       end
+
+      def inline_module
+        nil
+      end
     end
   end
 end

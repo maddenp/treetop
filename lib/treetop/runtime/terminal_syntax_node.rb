@@ -7,10 +7,10 @@ module Treetop
       end
 
       def inspect(indent="")
-	indent+
-	  self.class.to_s.sub(/.*:/,'') +
-	  " offset=#{interval.first}" +
-	  " #{text_value.inspect}"
+        indent+
+          self.class.to_s.sub(/.*:/,'') +
+          " offset=#{interval.first}" +
+          " #{text_value.inspect}"
       end
     end
   end

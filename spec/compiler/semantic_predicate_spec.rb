@@ -17,7 +17,7 @@ module SemanticPredicateSpec
       parse('foo', :consume_all_input => false) do |result|
         result.should be_nil
         terminal_failures = parser.terminal_failures
-	terminal_failures.size.should == 1
+        terminal_failures.size.should == 1
       end
     end
 
@@ -44,7 +44,7 @@ module SemanticPredicateSpec
         result.should be_nil
         $value.should == 'prior '
         terminal_failures = parser.terminal_failures
-	terminal_failures.size.should == 1
+        terminal_failures.size.should == 1
       end
     end
 
@@ -69,7 +69,7 @@ module SemanticPredicateSpec
         result.should be_nil
         $value.should == 'prior '
         terminal_failures = parser.terminal_failures
-	terminal_failures.size.should == 1
+        terminal_failures.size.should == 1
       end
     end
 
@@ -78,7 +78,7 @@ module SemanticPredicateSpec
       parse('foo', :consume_all_input => false) do |result|
         result.should be_nil
         terminal_failures = parser.terminal_failures
-	# We should get "prior " failed, and also the predicate block
+        # We should get "prior " failed, and also the predicate block
         terminal_failures.size.should == 2
         terminal_failures[0].index.should == 0
         terminal_failures[0].expected_string.should == '"prior "'
@@ -105,7 +105,7 @@ module SemanticPredicateSpec
       parse('foo', :consume_all_input => false) do |result|
         result.should be_nil
         terminal_failures = parser.terminal_failures
-	terminal_failures.size.should == 1
+        terminal_failures.size.should == 1
       end
     end
 
@@ -132,7 +132,7 @@ module SemanticPredicateSpec
         result.should be_nil
         $value.should == 'prior '
         terminal_failures = parser.terminal_failures
-	terminal_failures.size.should == 1
+        terminal_failures.size.should == 1
       end
     end
 
@@ -157,7 +157,7 @@ module SemanticPredicateSpec
         result.should be_nil
         $value.should == 'prior '
         terminal_failures = parser.terminal_failures
-	terminal_failures.size.should == 1
+        terminal_failures.size.should == 1
       end
     end
 

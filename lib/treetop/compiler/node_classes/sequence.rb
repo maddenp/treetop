@@ -42,7 +42,7 @@ module Treetop
       end
 
       def expected
-	'"<a sequence>"'
+        '"<a sequence>"'
       end
     end
     

@@ -20,8 +20,8 @@ module AnythingSymbolSpec
   
     it "fails to parse epsilon" do
       parse('') do |result|
-	result.should be_nil
-	parser.terminal_failures.size.should == 1
+        result.should be_nil
+        parser.terminal_failures.size.should == 1
       end
     end
   end

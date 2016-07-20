@@ -32,8 +32,8 @@ module GrammarSpec
 
     it "fails if it does not parse all input" do
       parse('barbarbazbaz') do |result|
-	result.should be_nil
-	parser.terminal_failures.size.should == 1
+        result.should be_nil
+        parser.terminal_failures.size.should == 1
       end
     end
 

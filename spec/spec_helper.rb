@@ -8,6 +8,11 @@ $LOAD_PATH.unshift File.expand_path('../../lib')
 require 'treetop'
 include Treetop
 
+# We're still using the old expect syntax:
+RSpec.configure do |c|
+  c.expect_with(:rspec) { |c| c.syntax = :should }
+end
+
 module Treetop
   module ExampleGroupInstanceMethods
     module ClassMethods
@@ -26,7 +31,7 @@ module Treetop
       end
 
       def testing_grammar(grammar_under_test)
-	self.parser_text = grammar_under_test
+        self.parser_text = grammar_under_test
         grammar_node = parse_with_metagrammar(grammar_under_test.strip, :module_or_grammar)
         self.parser_code = grammar_node.compile
         class_eval(self.parser_code)

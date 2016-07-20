@@ -33,7 +33,7 @@ module Treetop
       
       def generate_cache_lookup(builder)
         builder.if_ "node_cache[:#{name}].has_key?(index)" do
-	  cache_address = "node_cache[:#{name}][index]"
+          cache_address = "node_cache[:#{name}][index]"
           builder.assign 'cached', cache_address
           builder.if_ "cached" do
             # Handle lazily instantiated nodes:

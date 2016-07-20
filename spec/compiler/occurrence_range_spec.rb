@@ -55,7 +55,7 @@ module OccurrenceRangeSpec
       parse("foofoofoo") do |result|
         result.should be_nil
 
-	parser.terminal_failures.size.should == 1
+        parser.terminal_failures.size.should == 1
       end
     end
 
@@ -64,7 +64,7 @@ module OccurrenceRangeSpec
         result.should_not be_nil
         result.elements.size.should == 2
 
-	parser.terminal_failures.size.should == 0
+        parser.terminal_failures.size.should == 0
       end
     end
 
@@ -114,7 +114,7 @@ module OccurrenceRangeSpec
         result.should respond_to(:a_method)
 
         terminal_failures = parser.terminal_failures
-	terminal_failures.size.should == 0
+        terminal_failures.size.should == 0
       end
     end
 
@@ -123,7 +123,7 @@ module OccurrenceRangeSpec
         result.should be_nil
 
         terminal_failures = parser.terminal_failures
-	terminal_failures.size.should == 1
+        terminal_failures.size.should == 1
       end
     end
   end

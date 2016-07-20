@@ -65,7 +65,7 @@ module Treetop
       end
 
       def expected
-	parent_expression.atomic.expected && '"at least one "+'+parent_expression.atomic.expected
+        parent_expression.atomic.expected && '"at least one "+'+parent_expression.atomic.expected
       end
     end
 
@@ -78,30 +78,30 @@ module Treetop
           builder.if__ "#{accumulator_var}.size < #{min.text_value}" do
             reset_index
             assign_failure start_index_var
-	  end
+          end
           builder.else_ do
-	    clean_unsaturated
-	    assign_and_extend_result parent_expression
-	  end
+            clean_unsaturated
+            assign_and_extend_result parent_expression
+          end
         else
-	  clean_unsaturated
-	  assign_and_extend_result parent_expression
-	end
+          clean_unsaturated
+          assign_and_extend_result parent_expression
+        end
 
         end_comment(parent_expression)
       end
 
       # remove the last terminal_failure if we merely failed to reach the maximum
       def clean_unsaturated
-	if !max.empty? && max.text_value.to_i > 0
-	  builder.if_ "#{accumulator_var}.size < #{max.text_value}" do
-	    builder << '@terminal_failures.pop'  # Ignore the last failure.
-	  end
-	end
+        if !max.empty? && max.text_value.to_i > 0
+          builder.if_ "#{accumulator_var}.size < #{max.text_value}" do
+            builder << '@terminal_failures.pop'  # Ignore the last failure.
+          end
+        end
       end
 
       def expected
-	parent_expression.atomic.expected && "at least #{min.text_value} "+parent_expression.atomic.expected
+        parent_expression.atomic.expected && "at least #{min.text_value} "+parent_expression.atomic.expected
       end
     end
 

@@ -128,16 +128,16 @@ module CompiledParserSpec
       grammar Alternates
         rule main
           aa &{|s| s[0].elements[0].parent.should == s[0] }
-	  / ab &{|s| s[0].elements[0].parent.should == s[0] }
+          / ab &{|s| s[0].elements[0].parent.should == s[0] }
         end
 
-	rule aa
-	  'a' 'a'
-	end
+        rule aa
+          'a' 'a'
+        end
 
-	rule ab
-	  'a' 'b'
-	end
+        rule ab
+          'a' 'b'
+        end
       end
     }
 

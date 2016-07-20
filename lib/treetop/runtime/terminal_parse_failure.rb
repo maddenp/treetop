@@ -6,11 +6,11 @@ module Treetop
       def initialize(index, expected_string, unexpected = false)
         @index = index
         @expected_string = expected_string
-	@unexpected = unexpected
+        @unexpected = unexpected
       end
 
       def to_s
-	"String matching #{expected_string} #{@unexpected ? 'not ' : ''}expected."
+        "String matching #{expected_string} #{@unexpected ? 'not ' : ''}expected."
       end
     end
   end

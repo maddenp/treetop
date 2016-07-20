@@ -6,7 +6,7 @@ module Treetop
       end
 
       def expected
-	elements[2].expected
+        elements[2].expected
       end
     end
   end

@@ -36,15 +36,15 @@ module Treetop
     class NotPredicate < Predicate
       def when_success
         assign_failure
-	if (e = parent.atomic.expected)
-	  builder << "terminal_parse_failure(#{e}, true)"
-	end
+        if (e = parent.atomic.expected)
+          builder << "terminal_parse_failure(#{e}, true)"
+        end
       end
       
       def when_failure
-	if (e = parent.atomic.expected)
-	  builder << "@terminal_failures.pop"
-	end
+        if (e = parent.atomic.expected)
+          builder << "@terminal_failures.pop"
+        end
         assign_success
       end
     end

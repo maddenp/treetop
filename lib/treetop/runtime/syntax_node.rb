@@ -8,8 +8,8 @@ module Treetop
         @input = input
         @interval = interval
         if (@elements = elements)
-	  @elements.each { |e| e.equal?(true) or e.parent = self }
-	end
+          @elements.each { |e| e.equal?(true) or e.parent = self }
+        end
       end
 
       def elements
@@ -20,7 +20,7 @@ module Treetop
           if element == true
             index = last_element ? last_element.interval.last : interval.first
             element = SyntaxNode.new(input, index...(index + 1))
-	    element.parent = self
+            element.parent = self
           end
           last_element = element
         end
@@ -76,21 +76,21 @@ module Treetop
       end
 
       def inspect_children(indent="")
-	return '' unless elements && elements.size > 0
-	":" +
-	  elements.map do |e|
-	    begin
-	      "\n"+e.inspect(indent+"  ")
-	    rescue  # Defend against inspect not taking a parameter
-	      "\n"+indent+" "+e.inspect
-	    end
-	  end.
-	  join("")
+        return '' unless elements && elements.size > 0
+        ":" +
+          elements.map do |e|
+            begin
+              "\n"+e.inspect(indent+"  ")
+            rescue  # Defend against inspect not taking a parameter
+              "\n"+indent+" "+e.inspect
+            end
+          end.
+          join("")
       end
 
       def inspect(indent="")
-	inspect_self(indent) +
-	inspect_children(indent)
+        inspect_self(indent) +
+        inspect_children(indent)
       end
 
       @@dot_id_counter = 0

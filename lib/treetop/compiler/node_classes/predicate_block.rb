@@ -16,7 +16,7 @@ module Treetop
       end
 
       def expected
-	'"<semantic predicate>"'  # Should I include (some of) the text_value here?
+        '"<semantic predicate>"'  # Should I include (some of) the text_value here?
       end
     end
   end

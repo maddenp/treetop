@@ -14,8 +14,8 @@ module ParenthesizedExpressionSpec
   
     it "should behave as normal" do
       parse('foo') do |result|
-	result.should be_nil
-	parser.terminal_failures.size.should == 1
+        result.should be_nil
+        parser.terminal_failures.size.should == 1
       end
     end
   end
@@ -24,9 +24,9 @@ module ParenthesizedExpressionSpec
     testing_expression '("foo" { def inner; end } ) { def outer; end} '
     it "should extend both code modules " do
       parse('foo') do |result|
-	skip "Arbitrarily nested modules are not yet compiled"
-	result.should respond_to(:inner)
-	result.should respond_to(:outer)
+        skip "Arbitrarily nested modules are not yet compiled"
+        result.should respond_to(:inner)
+        result.should respond_to(:outer)
       end
     end
   end

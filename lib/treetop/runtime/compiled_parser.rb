@@ -17,12 +17,12 @@ module Treetop
         @index = options[:index] if options[:index]
         result = send("_nt_#{options[:root] || root}")
         should_consume_all = options.include?(:consume_all_input) ? options[:consume_all_input] : consume_all_input?
-	if (should_consume_all && index != input.size)
-	  if index > max_terminal_failure_index	# Otherwise the failure is already explained
-	    terminal_parse_failure('<END OF INPUT>', true)
-	  end
-	  return nil
-	end
+        if (should_consume_all && index != input.size)
+          if index > max_terminal_failure_index # Otherwise the failure is already explained
+            terminal_parse_failure('<END OF INPUT>', true)
+          end
+          return nil
+        end
         return SyntaxNode.new(input, index...(index + 1)) if result == true
         return result
       end
@@ -99,14 +99,14 @@ module Treetop
       end
 
       def has_terminal?(terminal, mode, index)
-	case mode
-	when :regexp	# A Regexp has been passed in, either a character class or a literel regex 'foo'r
-	  (terminal =~ input[index..-1]) == 0 && $&.length
-	when false	# The terminal is a string which must match exactly
+        case mode
+        when :regexp    # A Regexp has been passed in, either a character class or a literel regex 'foo'r
+          (terminal =~ input[index..-1]) == 0 && $&.length
+        when false      # The terminal is a string which must match exactly
           input[index, terminal.size] == terminal && terminal.size
-	when :insens	# The terminal is a downcased string which must match input downcased
+        when :insens    # The terminal is a downcased string which must match input downcased
           input[index, terminal.size].downcase == terminal && terminal.size
-	when true	# Only occurs with old compiled grammars, for character classes
+        when true       # Only occurs with old compiled grammars, for character classes
           rx = @regexps[terminal] ||= Regexp.new(terminal)
           input.index(rx, index) == index && $&.length
         end
