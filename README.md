@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cjheath/treetop.svg)](https://travis-ci.org/cjheath/treetop)
+
 Support
 =======
 
