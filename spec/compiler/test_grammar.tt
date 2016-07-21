@@ -1,4 +1,4 @@
-module Test
+class Test
   grammar Grammar
     rule foo
       'foo'

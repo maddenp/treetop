@@ -18,7 +18,7 @@ module Treetop
       end
 
       rule module_declaration
-        module_prefix:('module' space name:([A-Z] alphanumeric_char* ('::' [A-Z] alphanumeric_char*)*) space) module_contents:(module_declaration / grammar) suffix:(space 'end') {
+        module_prefix:(('module'/'class') space name:([A-Z] alphanumeric_char* ('::' [A-Z] alphanumeric_char*)*) space) module_contents:(module_declaration / grammar) suffix:(space 'end') {
           def compile
             module_prefix.text_value + module_contents.compile + suffix.text_value
           end

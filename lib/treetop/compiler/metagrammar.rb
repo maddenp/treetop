@@ -320,102 +320,122 @@ module Treetop
 
         i0, s0 = index, []
         i1, s1 = index, []
+        i2 = index
         if (match_len = has_terminal?('module', false, index))
-          r2 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+          r3 = instantiate_node(SyntaxNode,input, index...(index + match_len))
           @index += match_len
         else
           terminal_parse_failure('\'module\'')
-          r2 = nil
+          r3 = nil
+        end
+        if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
+          r2 = r3
+        else
+          if (match_len = has_terminal?('class', false, index))
+            r4 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+            @index += match_len
+          else
+            terminal_parse_failure('\'class\'')
+            r4 = nil
+          end
+          if r4
+            r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
+            r2 = r4
+          else
+            @index = i2
+            r2 = nil
+          end
         end
         s1 << r2
         if r2
-          r3 = _nt_space
-          s1 << r3
-          if r3
-            i4, s4 = index, []
+          r5 = _nt_space
+          s1 << r5
+          if r5
+            i6, s6 = index, []
             if has_terminal?(@regexps[gr = '\A[A-Z]'] ||= Regexp.new(gr), :regexp, index)
-              r5 = true
+              r7 = true
               @index += 1
             else
               terminal_parse_failure('[A-Z]')
-              r5 = nil
+              r7 = nil
             end
-            s4 << r5
-            if r5
-              s6, i6 = [], index
+            s6 << r7
+            if r7
+              s8, i8 = [], index
               loop do
-                r7 = _nt_alphanumeric_char
-                if r7
-                  s6 << r7
+                r9 = _nt_alphanumeric_char
+                if r9
+                  s8 << r9
                 else
                   break
                 end
               end
-              r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
-              s4 << r6
-              if r6
-                s8, i8 = [], index
+              r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+              s6 << r8
+              if r8
+                s10, i10 = [], index
                 loop do
-                  i9, s9 = index, []
+                  i11, s11 = index, []
                   if (match_len = has_terminal?('::', false, index))
-                    r10 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+                    r12 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                     @index += match_len
                   else
                     terminal_parse_failure('\'::\'')
-                    r10 = nil
+                    r12 = nil
                   end
-                  s9 << r10
-                  if r10
+                  s11 << r12
+                  if r12
                     if has_terminal?(@regexps[gr = '\A[A-Z]'] ||= Regexp.new(gr), :regexp, index)
-                      r11 = true
+                      r13 = true
                       @index += 1
                     else
                       terminal_parse_failure('[A-Z]')
-                      r11 = nil
+                      r13 = nil
                     end
-                    s9 << r11
-                    if r11
-                      s12, i12 = [], index
+                    s11 << r13
+                    if r13
+                      s14, i14 = [], index
                       loop do
-                        r13 = _nt_alphanumeric_char
-                        if r13
-                          s12 << r13
+                        r15 = _nt_alphanumeric_char
+                        if r15
+                          s14 << r15
                         else
                           break
                         end
                       end
-                      r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
-                      s9 << r12
+                      r14 = instantiate_node(SyntaxNode,input, i14...index, s14)
+                      s11 << r14
                     end
                   end
-                  if s9.last
-                    r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
-                    r9.extend(ModuleDeclaration0)
+                  if s11.last
+                    r11 = instantiate_node(SyntaxNode,input, i11...index, s11)
+                    r11.extend(ModuleDeclaration0)
                   else
-                    @index = i9
-                    r9 = nil
+                    @index = i11
+                    r11 = nil
                   end
-                  if r9
-                    s8 << r9
+                  if r11
+                    s10 << r11
                   else
                     break
                   end
                 end
-                r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
-                s4 << r8
+                r10 = instantiate_node(SyntaxNode,input, i10...index, s10)
+                s6 << r10
               end
             end
-            if s4.last
-              r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-              r4.extend(ModuleDeclaration1)
+            if s6.last
+              r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+              r6.extend(ModuleDeclaration1)
             else
-              @index = i4
-              r4 = nil
+              @index = i6
+              r6 = nil
             end
-            s1 << r4
-            if r4
-              r14 = _nt_space
-              s1 << r14
+            s1 << r6
+            if r6
+              r16 = _nt_space
+              s1 << r16
             end
           end
         end
@@ -428,44 +448,44 @@ module Treetop
         end
         s0 << r1
         if r1
-          i15 = index
-          r16 = _nt_module_declaration
-          if r16
-            r16 = SyntaxNode.new(input, (index-1)...index) if r16 == true
-            r15 = r16
+          i17 = index
+          r18 = _nt_module_declaration
+          if r18
+            r18 = SyntaxNode.new(input, (index-1)...index) if r18 == true
+            r17 = r18
           else
-            r17 = _nt_grammar
-            if r17
-              r17 = SyntaxNode.new(input, (index-1)...index) if r17 == true
-              r15 = r17
+            r19 = _nt_grammar
+            if r19
+              r19 = SyntaxNode.new(input, (index-1)...index) if r19 == true
+              r17 = r19
             else
-              @index = i15
-              r15 = nil
+              @index = i17
+              r17 = nil
             end
           end
-          s0 << r15
-          if r15
-            i18, s18 = index, []
-            r19 = _nt_space
-            s18 << r19
-            if r19
+          s0 << r17
+          if r17
+            i20, s20 = index, []
+            r21 = _nt_space
+            s20 << r21
+            if r21
               if (match_len = has_terminal?('end', false, index))
-                r20 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+                r22 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                 @index += match_len
               else
                 terminal_parse_failure('\'end\'')
-                r20 = nil
+                r22 = nil
               end
-              s18 << r20
+              s20 << r22
             end
-            if s18.last
-              r18 = instantiate_node(SyntaxNode,input, i18...index, s18)
-              r18.extend(ModuleDeclaration3)
+            if s20.last
+              r20 = instantiate_node(SyntaxNode,input, i20...index, s20)
+              r20.extend(ModuleDeclaration3)
             else
-              @index = i18
-              r18 = nil
+              @index = i20
+              r20 = nil
             end
-            s0 << r18
+            s0 << r20
           end
         end
         if s0.last
