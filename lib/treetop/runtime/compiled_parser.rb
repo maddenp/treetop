@@ -52,10 +52,10 @@ module Treetop
       end
 
       def terminal_failures
-        if @terminal_failures.empty? || @terminal_failures[0].is_a?(TerminalParseFailure)
+        if @terminal_failures.empty? || @terminal_failures[-1].is_a?(TerminalParseFailure)
           @terminal_failures
         else
-          @terminal_failures.map! {|tf_ary| TerminalParseFailure.new(*tf_ary) }
+          @terminal_failures.map! {|tf_ary| tf_ary.is_a?(TerminalParseFailure) ? tf_ary : TerminalParseFailure.new(*tf_ary) }
         end
       end
 
@@ -73,6 +73,11 @@ module Treetop
         @regexps = {}
         @terminal_failures = []
         @max_terminal_failure_index = 0
+      end
+
+      def forget_failures_to_here
+        @terminal_failures = []
+        @max_terminal_failure_index = -1
       end
 
       def reset_index
@@ -113,12 +118,20 @@ module Treetop
       end
 
       def terminal_parse_failure(expected_string, unexpected = false)
+        if @max_terminal_failure_index == -1
+          @max_terminal_failure_index = 0
+          return nil
+        end
         return nil if index < max_terminal_failure_index
         if index > max_terminal_failure_index
           @max_terminal_failure_index = index
           @terminal_failures = []
         end
         @terminal_failures << [index, expected_string, unexpected]
+        # It's very slow, but this shows the last 5 nested rules:
+        # caller.reject{|l| l =~ /`loop'|`block in /}[0..5].reverse.map{|l| l.sub(/[^`]*`_nt_/,'').sub(/'/,'')}
+
+        terminal_failures
         return nil
       end
     end

@@ -1,32 +1,6 @@
-require 'rubygems'
-require 'bundler'
-Bundler.setup(:default, :development)
-require 'rake'
-require 'jeweler'
+require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require File.expand_path("../lib/treetop/version", __FILE__)
-
-Jeweler::Tasks.new do |gem|
-  gem.name = "treetop"
-  gem.version = Treetop::VERSION::STRING
-  gem.author = ["Nathan Sobo", "Clifford Heath"]
-  gem.license = "MIT"
-  gem.email = "cliffordheath@gmail.com"
-  gem.homepage = "https://github.com/cjheath/treetop"
-  gem.platform = Gem::Platform::RUBY
-  gem.summary = "A Ruby-based text parsing and interpretation DSL"
-  gem.description = "A Parsing Expression Grammar (PEG) Parser generator DSL for Ruby"
-  gem.files = [
-      "LICENSE", "README.md", "Rakefile", "treetop.gemspec",
-      "{spec,lib,bin,examples}/**/*",
-      "doc/*"
-    ].map{|p| Dir[p] }.flatten
-  gem.bindir = "bin"
-  gem.executables = ["tt"]
-  gem.require_path = "lib"
-  gem.has_rdoc = false
-end
-Jeweler::RubygemsDotOrgTasks.new
 
 task :default => :spec
 RSpec::Core::RakeTask.new do |t|
@@ -51,7 +25,8 @@ task :rebuild do
 end
 
 task :version do
-  puts RUBY_VERSION
+  puts 'Ruby is '+RUBY_VERSION
+  puts 'Treetop is '+Treetop::VERSION::STRING
 end
 
 desc 'Generate website files'
