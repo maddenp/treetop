@@ -9,7 +9,7 @@ module Treetop
       def initialize
         @level = 0
         @address_space = LexicalAddressSpace.new
-        @ruby = ""
+        @ruby = String.new("")
       end
       
       def <<(ruby_line)              
