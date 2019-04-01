@@ -37,11 +37,7 @@ task :website do
     git checkout gh-pages
     rm -r doc
     mv .doc-tmp doc
-    rake website
-    git add --update
-    git add *.html
-    git commit -m"Website update `date`"
-    git push
+    rake website upload
     git checkout master
   END
 end
