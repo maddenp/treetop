@@ -29,23 +29,19 @@ task :version do
   puts 'Treetop is '+Treetop::VERSION::STRING
 end
 
-desc 'Generate website files'
-task :website_generate do
-  `cd doc; ruby ./site.rb`
-end
-
-desc 'Upload website files'
-task :website_upload do
-  # The website is now done using gh-pages
+desc 'Generate and upload website files'
+task :website do
   system <<-END
+    rm -rf .doc-tmp
+    cp -r doc .doc-tmp
     git checkout gh-pages
-    cp website/*.html .
+    rm -r doc
+    mv .doc-tmp doc
+    rake website
+    git add --update
     git add *.html
     git commit -m"Website update `date`"
     git push
     git checkout master
   END
 end
-
-desc 'Generate and upload website files'
-task :website => [:website_generate, :website_upload]
