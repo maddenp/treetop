@@ -13,7 +13,7 @@ module Treetop
       end
       
       def <<(ruby_line)              
-        return if ruby_line.blank?
+        return if ruby_line == ''
         ruby << ruby_line.tabto(level) << "\n"
       end
 

@@ -13,12 +13,6 @@ class String
     self[0...index].count("\n") + 1
   end
 
-  unless method_defined?(:blank?)
-    def blank?
-      self == ""
-    end
-  end
-
   # The following methods are lifted from Facets 2.0.2
   def tabto(n)
     if self =~ /^( *)\S/
