@@ -6,7 +6,7 @@ Support
 Support for Treetop is provided through the mailing list you can join or browse here:
 http://groups.google.com/group/treetop-dev 
 
-The gem is released from https://github.com/cjheath/treetop so you should check there as well.
+The gem is released from https://cjheath.github.io/treetop/ so you should check there as well.
 
 Tutorial
 ========
