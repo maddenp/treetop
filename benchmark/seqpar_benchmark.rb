@@ -87,7 +87,7 @@ class SeqParBenchmark
       end
     end
     
-    if File.exists?(File.join(@where, 'before.dat'))
+    if File.exist?(File.join(@where, 'before.dat'))
       before = {}
       performance_increases = []
       File.foreach(File.join(@where, 'before.dat')) do |line|
