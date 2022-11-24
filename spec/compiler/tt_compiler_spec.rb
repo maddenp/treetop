@@ -23,20 +23,20 @@ describe "The 'tt' comand line compiler" do
         f.print("# Encoding: UTF-8\n")
         f.print("grammar Dumb\n")
         f.print("end\n")
-      end unless File.exists?(@test_grammar)
+      end unless File.exist?(@test_grammar)
     end
 
     after(:each) do
       # cleanup test grammar and parser output files
-      File.delete(@test_grammar) if File.exists?(@test_grammar)
-      File.delete(@test_ruby) if File.exists?(@test_ruby)
+      File.delete(@test_grammar) if File.exist?(@test_grammar)
+      File.delete(@test_ruby) if File.exist?(@test_ruby)
     end
 
     it 'can compile a grammar file' do
       # puts %q{emulate 'tt dumb.tt'}
       system("ruby -S tt #{@test_grammar}").should be_truthy
 
-      File.exists?(@test_ruby).should be_truthy
+      File.exist?(@test_ruby).should be_truthy
       File.zero?(@test_ruby).should_not be_truthy
     end
 
@@ -46,7 +46,7 @@ describe "The 'tt' comand line compiler" do
       # puts %q{emulate 'tt "../<current_dir>/dumb.tt"'}
       system("cd #{@tmpdir}/..; ruby -S tt \"./#{dir}/#{@test_base}.tt\"").should be_truthy
 
-      File.exists?(@test_ruby).should be_truthy
+      File.exist?(@test_ruby).should be_truthy
       File.zero?(@test_ruby).should_not be_truthy
     end
 
@@ -54,7 +54,7 @@ describe "The 'tt' comand line compiler" do
       # puts %q{emulate 'tt "/path/to/dumb.tt"'}
       system("ruby -S tt \"#{File.expand_path(@test_grammar)}\"").should be_truthy
 
-      File.exists?(@test_ruby).should be_truthy
+      File.exist?(@test_ruby).should be_truthy
       File.zero?(@test_ruby).should_not be_truthy
     end
 
@@ -62,7 +62,7 @@ describe "The 'tt' comand line compiler" do
       # puts %q{emulate 'tt dumb'}
       system("ruby -S tt #{@test_path}").should be_truthy
 
-      File.exists?(@test_ruby).should be_truthy
+      File.exist?(@test_ruby).should be_truthy
       File.zero?(@test_ruby).should_not be_truthy
     end
 
@@ -72,7 +72,7 @@ describe "The 'tt' comand line compiler" do
         (io.read =~ /ERROR.*?not exist.*?continuing/).should_not be_nil
       end
 
-      File.exists?("#{@test_base}.rb").should be_falsey
+      File.exist?("#{@test_base}.rb").should be_falsey
     end
 
     it 'can compile to a specified parser source file' do
@@ -81,10 +81,10 @@ describe "The 'tt' comand line compiler" do
       begin
         system("ruby -S tt -o #{pf} #{@test_path}").should be_truthy
 
-        File.exists?(pf).should be_truthy
+        File.exist?(pf).should be_truthy
         File.zero?(pf).should_not be_truthy
       ensure
-        File.delete(pf) if File.exists?(pf)
+        File.delete(pf) if File.exist?(pf)
       end
     end
 
@@ -94,7 +94,7 @@ describe "The 'tt' comand line compiler" do
       begin
         system("ruby -S tt -o #{pf} #{@test_path}").should be_truthy
 
-        File.exists?(pf).should be_truthy
+        File.exist?(pf).should be_truthy
         File.zero?(pf).should_not be_truthy
 
         # Check that the magic comment is preserved:
@@ -113,7 +113,7 @@ describe "The 'tt' comand line compiler" do
 
         Digest::SHA1.hexdigest(File.read(pf)).should == orig_file_hash
       ensure
-        File.delete(pf) if File.exists?(pf)
+        File.delete(pf) if File.exist?(pf)
       end
     end
 
@@ -123,7 +123,7 @@ describe "The 'tt' comand line compiler" do
       begin
         system("ruby -S tt -o #{pf} #{@test_path}").should be_truthy
 
-        File.exists?(pf).should be_truthy
+        File.exist?(pf).should be_truthy
         File.zero?(pf).should_not be_truthy
         orig_file_hash = Digest::SHA1.hexdigest(File.read(pf))
 
@@ -133,7 +133,7 @@ describe "The 'tt' comand line compiler" do
         system("ruby -S tt -o #{pf} #{@test_path}").should be_truthy
         Digest::SHA1.hexdigest(File.read(pf)).should == orig_file_hash
       ensure
-        File.delete(pf) if File.exists?(pf)
+        File.delete(pf) if File.exist?(pf)
       end
     end
 
@@ -141,7 +141,7 @@ describe "The 'tt' comand line compiler" do
       pf = "#{@test_path}.rb"
       system("echo some junk >#{pf}").should be_truthy
 
-      File.exists?(pf).should be_truthy
+      File.exist?(pf).should be_truthy
       File.zero?(pf).should_not be_truthy
       orig_file_hash = Digest::SHA1.hexdigest(File.read(pf))
 
@@ -167,14 +167,14 @@ describe "The 'tt' comand line compiler" do
         File.open(grammar_file, 'w+') do |f|
           f.print("grammar #{e.capitalize}\n")
           f.print("end\n")
-        end unless File.exists?(grammar_file)
+        end unless File.exist?(grammar_file)
       end
     end
 
     after(:each) do
       # cleanup test grammar and output parser files
-      @test_grammars.each { |f| File.delete(f) if File.exists?(f) }
-      @test_bases.each { |f| File.delete("#{f}.rb") if File.exists?("#{f}.rb") }
+      @test_grammars.each { |f| File.delete(f) if File.exist?(f) }
+      @test_bases.each { |f| File.delete("#{f}.rb") if File.exist?("#{f}.rb") }
     end
  
     it 'can compile them in one invocation' do
@@ -183,7 +183,7 @@ describe "The 'tt' comand line compiler" do
 
       @test_bases.each do |f|
         pf = "#{f}.rb"
-        File.exists?(pf).should be_truthy
+        File.exist?(pf).should be_truthy
         File.zero?(pf).should_not be_truthy
       end
     end
@@ -194,7 +194,7 @@ describe "The 'tt' comand line compiler" do
 
       @test_bases.each do |f|
         pf = "#{f}.rb"
-        File.exists?(pf).should be_truthy
+        File.exist?(pf).should be_truthy
         File.zero?(pf).should_not be_truthy
       end
     end
@@ -203,12 +203,12 @@ describe "The 'tt' comand line compiler" do
       # puts %q{emulate 'tt not_here bad_ext.ttg dumb1 dumb2'}
       system("ruby -S tt not_here bad_ext.ttg #{@test_bases.join(' ')} >/dev/null 2>&1").should be_truthy
 
-      File.exists?('not_here.rb').should_not be_truthy
-      File.exists?('bad_ext.rb').should_not be_truthy
+      File.exist?('not_here.rb').should_not be_truthy
+      File.exist?('bad_ext.rb').should_not be_truthy
 
       @test_bases.each do |f|
         pf = "#{f}.rb"
-        File.exists?(pf).should be_truthy
+        File.exist?(pf).should be_truthy
         File.zero?(pf).should_not be_truthy
       end
     end
@@ -217,7 +217,7 @@ describe "The 'tt' comand line compiler" do
       # puts %q{emulate 'tt -o my_bogus_test_parser.rb dumb1 dumb2'}
       pf = 'my_bogus_test_parser.rb'
       system("ruby -S tt -o #{pf} #{@test_bases.join(' ')} >/dev/null 2>&1").should be_falsey
-      File.exists?(pf).should be_falsey
+      File.exist?(pf).should be_falsey
     end
   end
 
